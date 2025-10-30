@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rprofile
+rsconnect/
+06_analisis_de_datos_masivos/ARCHIVOS/actividad1/input/
+06_analisis_de_datos_masivos/ARCHIVOS/actividad1/output/
+old/
+.ipynb_checkpoints/
+.git

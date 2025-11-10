@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>t1</name>
+    <name>t3</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -427,10 +427,10 @@
     <clusterschemas>
     </clusterschemas>
     <created_user>-</created_user>
-    <created_date>2025/10/27 17:48:26.916</created_date>
+    <created_date>2025/11/01 20:37:35.848</created_date>
     <modified_user>-</modified_user>
-    <modified_date>2025/10/27 17:48:26.916</modified_date>
-    <key_for_session_key>H4sIAAAAAAAA/wMAAAAAAAAAAAA=</key_for_session_key>
+    <modified_date>2025/11/01 20:37:35.848</modified_date>
+    <key_for_session_key/>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
@@ -441,8 +441,8 @@ Salidas: tabla 'covid_c': casos confirmados
 			  tabla 'covid_cf': casos confirmados reportados como fallecidos
 
 </note>
-      <xloc>261</xloc>
-      <yloc>59</yloc>
+      <xloc>224</xloc>
+      <yloc>416</yloc>
       <width>492</width>
       <heigth>103</heigth>
       <fontname>Segoe UI</fontname>
@@ -467,7 +467,7 @@ Salidas: tabla 'covid_c': casos confirmados
     <type>POSTGRESQL</type>
     <access>Native</access>
     <database>${BD_NAME}</database>
-    <port>5432</port>
+    <port>${BD_PORT}</port>
     <username>${BD_USER}</username>
     <password>${BD_PASS}</password>
     <servername/>
@@ -487,12 +487,8 @@ Salidas: tabla 'covid_c': casos confirmados
         <attribute>N</attribute>
       </attribute>
       <attribute>
-        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
-        <attribute>N</attribute>
-      </attribute>
-      <attribute>
         <code>PORT_NUMBER</code>
-        <attribute>5432</attribute>
+        <attribute>${BD_PORT}</attribute>
       </attribute>
       <attribute>
         <code>PRESERVE_RESERVED_WORD_CASE</code>
@@ -518,28 +514,8 @@ Salidas: tabla 'covid_c': casos confirmados
   </connection>
   <order>
     <hop>
-      <from>CSV file input</from>
-      <to>Filtrar casos descartados</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Filtrar casos descartados</from>
-      <to>Transformación simulada (no hace nada)</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Filtrar casos descartados</from>
-      <to>Crear campo 'periodo'</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Filtrar según campo 'fallecido'</from>
-      <to>poblar tabla covid_cf</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Filtrar según campo 'fallecido'</from>
-      <to>poblar tabla covid_c</to>
+      <from>Convertir 'periodo' a String(6)</from>
+      <to>Ordenar</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -548,13 +524,23 @@ Salidas: tabla 'covid_c': casos confirmados
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Convertir 'periodo' a String(6)</from>
-      <to>Ordenar</to>
+      <from>Ordenar</from>
+      <to>Agrupar y generar 'cant_casos'</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Ordenar</from>
-      <to>Agrupar y generar 'cant_casos'</to>
+      <from>CSV file input</from>
+      <to>Filtrar filas</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filtrar filas</from>
+      <to>Crear campo 'periodo'</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filtrar filas</from>
+      <to>Transformación simulada (no hace nada)</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -564,7 +550,7 @@ Salidas: tabla 'covid_c': casos confirmados
     </hop>
     <hop>
       <from>Agrupar y generar 'cant_casos'</from>
-      <to>Filtrar según campo 'fallecido'</to>
+      <to>poblar tabla covid_tbl</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -600,6 +586,9 @@ Salidas: tabla 'covid_c': casos confirmados
       <field>
         <name>fallecido</name>
       </field>
+      <field>
+        <name>clasificacion_resumen</name>
+      </field>
     </group>
     <fields>
       <field>
@@ -618,8 +607,8 @@ Salidas: tabla 'covid_c': casos confirmados
       </output>
     </remotesteps>
     <GUI>
-      <xloc>800</xloc>
-      <yloc>224</yloc>
+      <xloc>816</xloc>
+      <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -935,7 +924,7 @@ Salidas: tabla 'covid_c': casos confirmados
     </remotesteps>
     <GUI>
       <xloc>96</xloc>
-      <yloc>368</yloc>
+      <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -953,78 +942,103 @@ Salidas: tabla 'covid_c': casos confirmados
     <fields>
       <field>
         <name>id_evento_caso</name>
+        <rename/>
       </field>
       <field>
         <name>sexo</name>
+        <rename/>
       </field>
       <field>
         <name>edad</name>
+        <rename/>
       </field>
       <field>
         <name>edad_años_meses</name>
+        <rename/>
       </field>
       <field>
         <name>residencia_pais_nombre</name>
+        <rename/>
       </field>
       <field>
         <name>residencia_provincia_nombre</name>
+        <rename/>
       </field>
       <field>
         <name>residencia_departamento_nombre</name>
+        <rename/>
       </field>
       <field>
         <name>carga_provincia_nombre</name>
+        <rename/>
       </field>
       <field>
         <name>fecha_inicio_sintomas</name>
+        <rename/>
       </field>
       <field>
         <name>periodo</name>
+        <rename/>
       </field>
       <field>
         <name>sepi_apertura</name>
+        <rename/>
       </field>
       <field>
         <name>fecha_internacion</name>
+        <rename/>
       </field>
       <field>
         <name>cuidado_intensivo</name>
+        <rename/>
       </field>
       <field>
         <name>fecha_cui_intensivo</name>
+        <rename/>
       </field>
       <field>
         <name>fallecido</name>
+        <rename/>
       </field>
       <field>
         <name>fecha_fallecimiento</name>
+        <rename/>
       </field>
       <field>
         <name>asistencia_respiratoria_mecanica</name>
+        <rename/>
       </field>
       <field>
         <name>carga_provincia_id</name>
+        <rename/>
       </field>
       <field>
         <name>origen_financiamiento</name>
+        <rename/>
       </field>
       <field>
         <name>clasificacion</name>
+        <rename/>
       </field>
       <field>
         <name>clasificacion_resumen</name>
+        <rename/>
       </field>
       <field>
         <name>residencia_provincia_id</name>
+        <rename/>
       </field>
       <field>
         <name>fecha_diagnostico</name>
+        <rename/>
       </field>
       <field>
         <name>residencia_departamento_id</name>
+        <rename/>
       </field>
       <field>
         <name>ultima_actualizacion</name>
+        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
       <meta>
@@ -1054,8 +1068,8 @@ Salidas: tabla 'covid_c': casos confirmados
       </output>
     </remotesteps>
     <GUI>
-      <xloc>432</xloc>
-      <yloc>224</yloc>
+      <xloc>448</xloc>
+      <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1073,78 +1087,103 @@ Salidas: tabla 'covid_c': casos confirmados
     <fields>
       <field>
         <name>id_evento_caso</name>
+        <rename/>
       </field>
       <field>
         <name>sexo</name>
+        <rename/>
       </field>
       <field>
         <name>edad</name>
+        <rename/>
       </field>
       <field>
         <name>edad_años_meses</name>
+        <rename/>
       </field>
       <field>
         <name>residencia_pais_nombre</name>
+        <rename/>
       </field>
       <field>
         <name>residencia_provincia_nombre</name>
+        <rename/>
       </field>
       <field>
         <name>residencia_departamento_nombre</name>
+        <rename/>
       </field>
       <field>
         <name>carga_provincia_nombre</name>
+        <rename/>
       </field>
       <field>
         <name>fecha_inicio_sintomas</name>
+        <rename/>
       </field>
       <field>
         <name>fecha_apertura</name>
+        <rename/>
       </field>
       <field>
         <name>sepi_apertura</name>
+        <rename/>
       </field>
       <field>
         <name>fecha_internacion</name>
+        <rename/>
       </field>
       <field>
         <name>cuidado_intensivo</name>
+        <rename/>
       </field>
       <field>
         <name>fecha_cui_intensivo</name>
+        <rename/>
       </field>
       <field>
         <name>fallecido</name>
+        <rename/>
       </field>
       <field>
         <name>fecha_fallecimiento</name>
+        <rename/>
       </field>
       <field>
         <name>asistencia_respiratoria_mecanica</name>
+        <rename/>
       </field>
       <field>
         <name>carga_provincia_id</name>
+        <rename/>
       </field>
       <field>
         <name>origen_financiamiento</name>
+        <rename/>
       </field>
       <field>
         <name>clasificacion</name>
+        <rename/>
       </field>
       <field>
         <name>clasificacion_resumen</name>
+        <rename/>
       </field>
       <field>
         <name>residencia_provincia_id</name>
+        <rename/>
       </field>
       <field>
         <name>fecha_diagnostico</name>
+        <rename/>
       </field>
       <field>
         <name>residencia_departamento_id</name>
+        <rename/>
       </field>
       <field>
         <name>ultima_actualizacion</name>
+        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
       <meta>
@@ -1174,96 +1213,8 @@ Salidas: tabla 'covid_c': casos confirmados
       </output>
     </remotesteps>
     <GUI>
-      <xloc>240</xloc>
-      <yloc>224</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Filtrar casos descartados</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <send_true_to>Crear campo 'periodo'</send_true_to>
-    <send_false_to>Transformación simulada (no hace nada)</send_false_to>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <leftvalue>clasificacion_resumen</leftvalue>
-        <function>=</function>
-        <rightvalue/>
-        <value>
-          <name>constant</name>
-          <type>String</type>
-          <text>Confirmado</text>
-          <length>-1</length>
-          <precision>-1</precision>
-          <isnull>N</isnull>
-          <mask/>
-        </value>
-      </condition>
-    </compare>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>240</xloc>
-      <yloc>368</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Filtrar según campo 'fallecido'</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <send_true_to>poblar tabla covid_cf</send_true_to>
-    <send_false_to>poblar tabla covid_c</send_false_to>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <leftvalue>fallecido</leftvalue>
-        <function>=</function>
-        <rightvalue/>
-        <value>
-          <name>constant</name>
-          <type>String</type>
-          <text>NO</text>
-          <length>-1</length>
-          <precision>-1</precision>
-          <isnull>N</isnull>
-          <mask/>
-        </value>
-      </condition>
-    </compare>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>800</xloc>
-      <yloc>368</yloc>
+      <xloc>256</xloc>
+      <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1318,90 +1269,13 @@ Salidas: tabla 'covid_c': casos confirmados
         <collator_strength>0</collator_strength>
         <presorted>N</presorted>
       </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>624</xloc>
-      <yloc>224</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Transformación simulada (no hace nada)</name>
-    <type>Dummy</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>240</xloc>
-      <yloc>496</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>poblar tabla covid_c</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>PostgreSQL</connection>
-    <schema>public</schema>
-    <table>covid_cf</table>
-    <commit>1000</commit>
-    <truncate>Y</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
       <field>
-        <column_name>periodo</column_name>
-        <stream_name>periodo</stream_name>
-      </field>
-      <field>
-        <column_name>residencia_provincia_nombre</column_name>
-        <stream_name>residencia_provincia_nombre</stream_name>
-      </field>
-      <field>
-        <column_name>sexo</column_name>
-        <stream_name>sexo</stream_name>
-      </field>
-      <field>
-        <column_name>cant_casos</column_name>
-        <stream_name>cant_casos</stream_name>
+        <name>clasificacion_resumen</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
       </field>
     </fields>
     <attributes/>
@@ -1413,68 +1287,8 @@ Salidas: tabla 'covid_c': casos confirmados
       </output>
     </remotesteps>
     <GUI>
-      <xloc>624</xloc>
-      <yloc>496</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>poblar tabla covid_cf</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>PostgreSQL</connection>
-    <schema>public</schema>
-    <table>covid_c</table>
-    <commit>1000</commit>
-    <truncate>Y</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-      <field>
-        <column_name>periodo</column_name>
-        <stream_name>periodo</stream_name>
-      </field>
-      <field>
-        <column_name>residencia_provincia_nombre</column_name>
-        <stream_name>residencia_provincia_nombre</stream_name>
-      </field>
-      <field>
-        <column_name>sexo</column_name>
-        <stream_name>sexo</stream_name>
-      </field>
-      <field>
-        <column_name>cant_casos</column_name>
-        <stream_name>cant_casos</stream_name>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>800</xloc>
-      <yloc>496</yloc>
+      <xloc>640</xloc>
+      <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1528,7 +1342,7 @@ Salidas: tabla 'covid_c': casos confirmados
         <decimal/>
         <group/>
         <nullif/>
-        <trim_type>none</trim_type>
+        <trim_type>both</trim_type>
         <length>6</length>
         <precision>-1</precision>
       </field>
@@ -1540,8 +1354,8 @@ Salidas: tabla 'covid_c': casos confirmados
         <decimal/>
         <group/>
         <nullif/>
-        <trim_type>none</trim_type>
-        <length>16</length>
+        <trim_type>both</trim_type>
+        <length>30</length>
         <precision>-1</precision>
       </field>
       <field>
@@ -1552,7 +1366,7 @@ Salidas: tabla 'covid_c': casos confirmados
         <decimal/>
         <group/>
         <nullif/>
-        <trim_type>none</trim_type>
+        <trim_type>both</trim_type>
         <length>1</length>
         <precision>-1</precision>
       </field>
@@ -1564,7 +1378,7 @@ Salidas: tabla 'covid_c': casos confirmados
         <decimal/>
         <group/>
         <nullif/>
-        <trim_type>none</trim_type>
+        <trim_type>both</trim_type>
         <length>2</length>
         <precision>-1</precision>
       </field>
@@ -1576,9 +1390,21 @@ Salidas: tabla 'covid_c': casos confirmados
         <decimal>,</decimal>
         <group>.</group>
         <nullif/>
-        <trim_type>none</trim_type>
+        <trim_type>both</trim_type>
         <length>10</length>
         <precision>0</precision>
+      </field>
+      <field>
+        <name>clasificacion_resumen</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
       </field>
     </fields>
     <attributes/>
@@ -1590,8 +1416,164 @@ Salidas: tabla 'covid_c': casos confirmados
       </output>
     </remotesteps>
     <GUI>
-      <xloc>624</xloc>
-      <yloc>368</yloc>
+      <xloc>816</xloc>
+      <yloc>96</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filtrar filas</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Crear campo 'periodo'</send_true_to>
+    <send_false_to>Transformación simulada (no hace nada)</send_false_to>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>residencia_provincia_nombre</leftvalue>
+            <function>IS NOT NULL</function>
+            <rightvalue/>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>fecha_apertura</leftvalue>
+            <function>IS NOT NULL</function>
+            <rightvalue/>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>residencia_provincia_nombre</leftvalue>
+            <function>&lt;></function>
+            <rightvalue/>
+            <value>
+              <name>constant</name>
+              <type>String</type>
+              <text>SIN ESPECIFICAR</text>
+              <length>-1</length>
+              <precision>-1</precision>
+              <isnull>N</isnull>
+              <mask/>
+            </value>
+          </condition>
+        </conditions>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>96</xloc>
+      <yloc>416</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Transformación simulada (no hace nada)</name>
+    <type>Dummy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>96</xloc>
+      <yloc>560</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>poblar tabla covid_tbl</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>PostgreSQL</connection>
+    <schema>public</schema>
+    <table>covid_tbl</table>
+    <commit>1000</commit>
+    <truncate>Y</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>periodo</column_name>
+        <stream_name>periodo</stream_name>
+      </field>
+      <field>
+        <column_name>residencia_provincia_nombre</column_name>
+        <stream_name>residencia_provincia_nombre</stream_name>
+      </field>
+      <field>
+        <column_name>sexo</column_name>
+        <stream_name>sexo</stream_name>
+      </field>
+      <field>
+        <column_name>fallecido</column_name>
+        <stream_name>fallecido</stream_name>
+      </field>
+      <field>
+        <column_name>clasificacion_resumen</column_name>
+        <stream_name>clasificacion_resumen</stream_name>
+      </field>
+      <field>
+        <column_name>cant_casos</column_name>
+        <stream_name>cant_casos</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>816</xloc>
+      <yloc>432</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
